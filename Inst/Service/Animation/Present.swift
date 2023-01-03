@@ -34,25 +34,21 @@ class Present: NSObject, UIViewControllerAnimatedTransitioning {
     }
     
     let finalFrame = toView.frame
-    
-    let background = UIView(frame: UIScreen.main.bounds)
-    background.backgroundColor = toView.backgroundColor
-    background.alpha = 0
-    
-    let viewToAnimate = UIImageView(frame: originFrame)
-    viewToAnimate.image = image
-    viewToAnimate.layer.cornerRadius = rounding
-    viewToAnimate.contentMode = .scaleAspectFill
-    viewToAnimate.clipsToBounds = true
-    
+    let background = setupBackground(toView: toView)
+    let viewToAnimate = setupViewToAnimate()
     let containerView = transitionContext.containerView
+    
     containerView.addSubview(background)
     containerView.addSubview(toView)
     containerView.addSubview(viewToAnimate)
     
     toView.isHidden = true
     
-    let imageAspectRatio = viewToAnimate.image!.size.width / viewToAnimate.image!.size.height
+    guard let image = viewToAnimate.image else {
+      transitionContext.completeTransition(true)
+      return
+    }
+    let imageAspectRatio = image.size.width / image.size.height
     let finalImageheight = finalFrame.width / imageAspectRatio
     
     UIView.animate(withDuration: duration, animations: {
@@ -66,6 +62,37 @@ class Present: NSObject, UIViewControllerAnimatedTransitioning {
       viewToAnimate.removeFromSuperview()
       transitionContext.completeTransition(true)
     })
-    
   }
+  
+  private func setupBackground(toView: UIView) -> UIView {
+    let background = UIView(frame: UIScreen.main.bounds)
+    background.backgroundColor = toView.backgroundColor
+    background.alpha = 0
+    
+    return background
+  }
+  
+  private func setupViewToAnimate()  -> UIImageView {
+    let viewToAnimate = UIImageView(frame: originFrame)
+    viewToAnimate.autoresizingMask = .flexibleWidth
+    viewToAnimate.contentMode = .scaleAspectFill
+    viewToAnimate.layer.masksToBounds = true
+    viewToAnimate.image = image
+    viewToAnimate.clipsToBounds = true
+    viewToAnimate.layer.cornerRadius = rounding
+    
+    DispatchQueue.main.async {
+      switch self.image.imageOrientation {
+      case .right:
+        guard let data = self.image.pngData() else { return }
+        let imageToSend = UIImage(data: data)?.rotate(radians: .pi / 2)
+        viewToAnimate.image = imageToSend
+      default:
+        break
+      }
+    }
+    
+    return viewToAnimate
+  }
+  
 }

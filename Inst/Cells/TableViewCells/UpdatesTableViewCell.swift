@@ -1,5 +1,5 @@
 //
-//  FirstTableViewCell.swift
+//  UpdatesTableViewCell.swift
 //  wq
 //
 //  Created by Роман on 24.12.2021.
