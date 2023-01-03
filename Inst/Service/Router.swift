@@ -22,8 +22,6 @@ protocol RouterProtocol: RouterMain {
 
 class Router: RouterProtocol {
   
-  private let navigationController = UINavigationController()
-  
   var tabBarController: UITabBarController
   var assemblyBuilder: AssemblyBuilderProtocol
   
@@ -40,6 +38,8 @@ class Router: RouterProtocol {
     let userView = assemblyBuilder.createUserModule(router: self)
     
     tabBarController.setViewControllers([mainView, searchView, updatesView, userView], animated: true)
+    tabBarController.tabBar.isHidden = false
+    tabBarController.tabBar.backgroundColor = .white
     
     let imagesArray = [UIImage.fontAwesomeIcon(name: .houseUser, style: .solid, textColor: .black, size: CGSize(width: 30, height: 30)),
                        UIImage.fontAwesomeIcon(name: .search, style: .solid, textColor: .black, size: CGSize(width: 30, height: 30)),
@@ -59,8 +59,7 @@ class Router: RouterProtocol {
   }
   
   func openCameraView(view: UIViewController) {
-    let cameraView = assemblyBuilder.createImagePicker(router: self)
-    cameraView.sourceType = .camera
+    let cameraView = assemblyBuilder.createCameraViewCtonrtoller(router: self)
     view.present(cameraView, animated: true)
   }
 }

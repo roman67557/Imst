@@ -1,5 +1,5 @@
 //
-//  AssemblyModelBuilder.swift
+//  AssemblyModuleBuilder.swift
 //  wqTests
 //
 //  Created by Роман on 13.01.2022.
@@ -15,10 +15,10 @@ protocol AssemblyBuilderProtocol {
   func createUserModule(router: RouterProtocol) -> UINavigationController
   
   func createDetailedController(img: Types, router: RouterProtocol, index: Int) -> UIViewController
-  func createImagePicker(router: RouterProtocol) -> UIImagePickerController
+  func createCameraViewCtonrtoller(router: RouterProtocol) -> UIViewController
 }
 
-class AssemblyModelBuilder: AssemblyBuilderProtocol {
+class AssemblyModuleBuilder: AssemblyBuilderProtocol {
   
   func createMainModule(router: RouterProtocol) -> UINavigationController {
     let view = MainViewController()
@@ -71,9 +71,9 @@ class AssemblyModelBuilder: AssemblyBuilderProtocol {
     return view
   }
   
-  func createImagePicker(router: RouterProtocol) -> UIImagePickerController {
-    let view = ImagePickerController()
-    let presenter = ImagePickerPresenter(view: view, router: router)
+  func createCameraViewCtonrtoller(router: RouterProtocol) -> UIViewController {
+    let view = CameraViewController()
+    let presenter = CameraViewPresenter(view: view, router: router)
     view.presenter = presenter
     
     return view

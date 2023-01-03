@@ -19,6 +19,10 @@ class DetailedCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
   
   public func configure<T>(with photo: T) {
     
+    addSubViews()
+    setupScroll()
+    setupConstraints()
+    
     if photo is Results {
       let result = photo as? Results
       
@@ -34,10 +38,6 @@ class DetailedCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
       guard let shootedImage = photo as? ShooterdImages else { return }
       setupImageView(shootedImage: shootedImage)
     }
-    
-    addSubViews()
-    setupScroll()
-    setupConstraints()
   }
   
   private func addSubViews() {

@@ -20,18 +20,4 @@ extension UIImageView {
     }
   }
   
-  func generateImage(height: Int, width: Int) {
-    let size = CGSize(width: width, height: height)
-    let renderer = UIGraphicsImageRenderer(size: size)
-    
-    let img = renderer.image { contex in
-      let rect = CGRect(x: 0, y: 0, width: width, height: height)
-      contex.cgContext.setFillColor(UIColor.systemGray5.cgColor)
-      contex.cgContext.addRect(rect)
-      contex.cgContext.drawPath(using: .fill)
-    }
-    
-    self.image = img
-  }
-  
 }

@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 
 protocol Animation: AnyObject {
-  
+
 }
 
 class UserViewController: UIViewController, Animation {
@@ -19,7 +19,7 @@ class UserViewController: UIViewController, Animation {
   private let fetchedResultController = DatabaseHandler.shared.fetchedResultsController(entityName: "ShooterdImages", keyForSort: "date")
   private var operations = [BlockOperation]()
   private let myPhotoImageView = UIImageView()
-  private var index: Int? 
+  private var index: Int?
   
   lazy var collectionView: UICollectionView = {
     let layout = UICollectionViewFlowLayout()
@@ -50,7 +50,6 @@ class UserViewController: UIViewController, Animation {
   }
   
   func setup() {
-    
     addSubViews()
     setupFetchedResultController()
     rightBarItem()
@@ -59,7 +58,6 @@ class UserViewController: UIViewController, Animation {
   }
   
   func addSubViews() {
-    
     [myPhotoImageView,
      collectionView].forEach { elem in
       view.addSubview(elem)
@@ -68,16 +66,12 @@ class UserViewController: UIViewController, Animation {
   }
   
   private func setupFetchedResultController() {
-    
     fetchedResultController.delegate = self
     try? fetchedResultController.performFetch()
   }
   
   func rightBarItem() {
-    
-    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
-                                                             target: self,
-                                                             action: #selector(openCamera))
+    self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(openCamera))
     navigationItem.rightBarButtonItem?.tintColor = .black
   }
   
@@ -101,7 +95,6 @@ class UserViewController: UIViewController, Animation {
   }
   
   private func setupConstraints() {
-    
     myPhotoImageView.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor).isActive = true
     myPhotoImageView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor).isActive = true
     myPhotoImageView.heightAnchor.constraint(equalToConstant: 100.0).isActive = true
@@ -113,49 +106,18 @@ class UserViewController: UIViewController, Animation {
     collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
   }
   
-  func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-    
-    switch operation {
-      
-    case .push:
-      guard let cell = collectionView.cellForItem(at: IndexPath(row: index ?? 0, section: 0)) as? SmallCollectionViewCell,
-            let selectedLayout = self.collectionView.layoutAttributesForItem(at: IndexPath(item: index ?? 0, section: 0)),
-            let image = cell.searchPageImageView.image else { return nil }
-      
-      let selectedCellFrame = collectionView.convert(selectedLayout.frame, to: collectionView.superview)
-      
-      return Present(image: image, originframe: selectedCellFrame)
-      
-    case .pop:
-      let detailedVC = fromVC as? DetailedSearchViewController
-      
-      guard let indexPath = detailedVC?.collectionView.indexPathsForVisibleItems.first,
-            let cell = detailedVC?.collectionView.cellForItem(at: indexPath) as? DetailedCollectionViewCell,
-            let selectedLayout = self.collectionView.layoutAttributesForItem(at: indexPath) else { return nil }
-      
-      let returningCellFrame = self.collectionView.convert(selectedLayout.frame, to: self.collectionView.superview)
-      return Dismiss(fromView: cell.imgView, finalFrame: returningCellFrame, image: cell.imgView.image ?? UIImage())
-
-    default:
-      return nil
-    }
-  }
-  
 }
 
 extension UserViewController: UICollectionViewDelegate, UICollectionViewDataSource {
   
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    
     guard let sections = fetchedResultController.sections else { return 0 }
     return sections[section].numberOfObjects
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    
-    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SmallCollectionViewCell.identifier, for: indexPath) as? SmallCollectionViewCell else { return UICollectionViewCell()}
-    
-    guard let shootedImage = fetchedResultController.object(at: indexPath) as? ShooterdImages else { return UICollectionViewCell() }
+    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SmallCollectionViewCell.identifier, for: indexPath) as? SmallCollectionViewCell,
+          let shootedImage = fetchedResultController.object(at: indexPath) as? ShooterdImages else { return UICollectionViewCell() }
     cell.configure(with: shootedImage)
     
     return cell
@@ -168,28 +130,51 @@ extension UserViewController: UICollectionViewDelegate, UICollectionViewDataSour
       shootedImages.append(shootedImage)
     })
     let type = Types.shooterdImages(shootedImages)
-    
+
     self.index = indexPath.item
     presenter?.openDetails(img: type, view: self, index: indexPath.item)
-    
   }
-  
-}
-
-extension UserViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
   
 }
 
 extension UserViewController: UserViewProtocol {
   
   @objc func moveToProfilePhoto(_ sender: Any) {
-    
     presenter?.moveToProfilePhoto(view: self)
   }
   
   @objc func openCamera(_ sender: Any) {
-    
     presenter?.openCamera(view: self)
+  }
+  
+}
+
+extension UserViewController: UINavigationControllerDelegate {
+  
+  func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    
+    switch operation {
+    case .push:
+      guard let cell = collectionView.cellForItem(at: IndexPath(row: index ?? 0, section: 0)) as? SmallCollectionViewCell,
+            let selectedLayout = self.collectionView.layoutAttributesForItem(at: IndexPath(item: index ?? 0, section: 0)),
+            let image = cell.searchPageImageView.image else { return .none }
+      
+      let selectedCellFrame = collectionView.convert(selectedLayout.frame, to: collectionView.superview)
+      
+      return Present(image: image, originframe: selectedCellFrame)
+      
+    case .pop:
+      let detailedVC = fromVC as? DetailedSearchViewController
+      guard let indexPath = detailedVC?.collectionView.indexPathsForVisibleItems.first,
+            let cell = detailedVC?.collectionView.cellForItem(at: indexPath) as? DetailedCollectionViewCell,
+            let selectedLayout = self.collectionView.layoutAttributesForItem(at: indexPath) else { return .none }
+      let returningCellFrame = self.collectionView.convert(selectedLayout.frame, to: self.collectionView.superview)
+      
+      return Dismiss(finalFrame: returningCellFrame, image: cell.imgView.image ?? UIImage())
+      
+    default:
+      return .none
+    }
   }
   
 }
@@ -205,35 +190,28 @@ extension UserViewController: NSFetchedResultsControllerDelegate {
     switch type {
     case .insert:
       guard let indexPath = newIndexPath else { return }
-    
       operations.append(BlockOperation(block: { [weak self] in
-          self?.collectionView.insertItems(at: [indexPath])
+        self?.collectionView.insertItems(at: [indexPath])
       }))
       
     case .update:
-      
       operations.append(BlockOperation(block: { [weak self] in
         guard let indexPath = indexPath else { return }
-        
         let photo = self?.fetchedResultController.object(at: indexPath) as? ShooterdImages
         let cell = self?.collectionView.cellForItem(at: indexPath) as? SmallCollectionViewCell
         cell?.configure(with: photo)
       }))
       
     case .move:
-      
       operations.append(BlockOperation(block: { [weak self] in
         DispatchQueue.main.async {
           guard let indexPath = indexPath, let newIndexPath = newIndexPath else { return }
-          
           self?.collectionView.moveItem(at: indexPath, to: newIndexPath)
         }
       }))
       
     case .delete:
-      
       operations.append(BlockOperation(block: { [weak self] in
-        
         guard let indexPath = indexPath else { return }
         self?.collectionView.deleteItems(at: [indexPath])
       }))
@@ -244,10 +222,11 @@ extension UserViewController: NSFetchedResultsControllerDelegate {
   }
   
   func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    
-      for operation in operations {
+    DispatchQueue.main.async { [unowned self] in
+      for operation in self.operations {
         operation.start()
       }
+    }
   }
   
 }

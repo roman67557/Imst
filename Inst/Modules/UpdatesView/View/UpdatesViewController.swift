@@ -27,7 +27,6 @@ class UpdatesViewController: UIViewController {
   }
   
   private func setup() {
-    
     addSubViews()
     setupFetchedResultController()
     setupTableView()
@@ -35,7 +34,6 @@ class UpdatesViewController: UIViewController {
   }
   
   private func addSubViews() {
-    
     [myTableView].forEach {
       $0.translatesAutoresizingMaskIntoConstraints = false
       view.addSubview($0)
@@ -43,20 +41,17 @@ class UpdatesViewController: UIViewController {
   }
   
   private func setupFetchedResultController() {
-    
     try? fetchedResultController.performFetch()
     fetchedResultController.delegate = self
   }
   
   private func setupTableView() {
-    
     myTableView.register(UpdatesTableViewCell.self, forCellReuseIdentifier: UpdatesTableViewCell.identifier)
     myTableView.delegate = self
     myTableView.dataSource = self
   }
   
   private func setupConstraints() {
-    
     myTableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
     myTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     myTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -73,7 +68,6 @@ extension UpdatesViewController: UITableViewDelegate, UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
     let cell = myTableView.dequeueReusableCell(withIdentifier: UpdatesTableViewCell.identifier, for: indexPath) as? UpdatesTableViewCell
     guard let data = fetchedResultController.object(at: indexPath) as? ShooterdImages else { return UITableViewCell () }
     
@@ -83,7 +77,6 @@ extension UpdatesViewController: UITableViewDelegate, UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    
     return 70
   }
   
@@ -100,7 +93,6 @@ extension UpdatesViewController: NSFetchedResultsControllerDelegate {
   }
   
   func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-    
     switch type {
     case .insert:
       guard let indexPath = newIndexPath else { return }

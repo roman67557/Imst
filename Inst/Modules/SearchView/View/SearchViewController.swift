@@ -180,8 +180,7 @@ extension SearchViewController: UINavigationControllerDelegate {
     case .push:
       guard let cell = collectionView.cellForItem(at: IndexPath(row: index ?? 0, section: 0)) as? SmallCollectionViewCell,
             let selectedLayout = self.collectionView.layoutAttributesForItem(at: IndexPath(item: index ?? 0, section: 0)),
-            let image = cell.searchPageImageView.image else { return nil }
-      
+            let image = cell.searchPageImageView.image else { return .none }
       let selectedCellFrame = collectionView.convert(selectedLayout.frame, to: collectionView.superview)
       
       return Present(image: image, originframe: selectedCellFrame)
@@ -191,13 +190,13 @@ extension SearchViewController: UINavigationControllerDelegate {
       
       guard let indexPath = detailedVC?.collectionView.indexPathsForVisibleItems.first,
             let cell = detailedVC?.collectionView.cellForItem(at: indexPath) as? DetailedCollectionViewCell,
-            let selectedLayout = self.collectionView.layoutAttributesForItem(at: indexPath) else { return nil }
-      
+            let selectedLayout = self.collectionView.layoutAttributesForItem(at: indexPath) else { return .none }
       let returningCellFrame = self.collectionView.convert(selectedLayout.frame, to: self.collectionView.superview)
-      return Dismiss(fromView: cell.imgView, finalFrame: returningCellFrame, image: cell.imgView.image ?? UIImage())
+      
+      return Dismiss(finalFrame: returningCellFrame, image: cell.imgView.image ?? UIImage())
 
     default:
-      return nil
+      return .none
     }
   }
   

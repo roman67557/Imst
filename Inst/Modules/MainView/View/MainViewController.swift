@@ -55,7 +55,7 @@ class MainViewController: UIViewController {
   
   fileprivate func setupTitleView() {
     
-    let leftItem = UIBarButtonItem(title: "Instagram", style: .plain, target: self, action: #selector(moveToUp))
+    let leftItem = UIBarButtonItem(title: "Inst", style: .plain, target: self, action: #selector(moveToUp))
     guard let billaBong = UIFont(name: "Billabong", size: 33) else { return }
     leftItem.setTitleTextAttributes([NSAttributedString.Key.font : billaBong], for: .normal)
     leftItem.setTitleTextAttributes([NSAttributedString.Key.font : billaBong], for: .highlighted)

@@ -44,14 +44,12 @@ class DetailedSearchViewController: UIViewController, UICollectionViewDataSource
   }
   
   private func setup() {
-    
     presenter?.setImg()
     addSubViews()
     setupColor()
     setupGestureRecognizers()
     setupTabBarHidden(true)
     setupConstraints()
-    
     
     scrollToSelectedImage()
   }
@@ -84,7 +82,6 @@ class DetailedSearchViewController: UIViewController, UICollectionViewDataSource
   }
   
   private func setupGestureRecognizers() {
-    
     let panGesture = PanDirectionGestureRecognizer(direction: PanDirection.vertical, target: self, action: #selector(wasDragged(_:)))
     collectionView.addGestureRecognizer(panGesture)
     collectionView.isUserInteractionEnabled = true

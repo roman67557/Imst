@@ -8,40 +8,32 @@
 import Foundation
 import UIKit
 
-protocol ImagePickerProtocol {
+protocol CameraViewProtocol {
   
 }
 
-protocol ImagePickerPresenterProtocol {
-  init(view: ImagePickerProtocol, router: RouterProtocol)
-  func catchPhotos(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any])
+protocol CameraViewPresenterProtocol {
+  init(view: CameraViewProtocol, router: RouterProtocol)
+  func catchPhotos(img: Data?)
 }
 
-class ImagePickerPresenter: ImagePickerPresenterProtocol {
+class CameraViewPresenter: CameraViewPresenterProtocol {
   
-  let view: ImagePickerProtocol?
+  let view: CameraViewProtocol?
   let router: RouterProtocol?
   
-  required init(view: ImagePickerProtocol, router: RouterProtocol) {
+  required init(view: CameraViewProtocol, router: RouterProtocol) {
     self.view = view
     self.router = router
   }
   
-  func catchPhotos(picker: UIImagePickerController, info: [UIImagePickerController.InfoKey : Any]) {
-    if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-      
-      let date = Date()
-      let df = DateFormatter()
-      df.dateFormat = "MMM d, h:mm a"
-      let dateString = df.string(from: date)
-      
-      print(date)
-      
-      let image = pickedImage.correctlyOrientedImage()
-      
-      DatabaseHandler.shared.saveImage(img: image, date: dateString)
-    } else { return }
-    picker.dismiss(animated: true)
+  func catchPhotos(img: Data?) {
+    let date = Date()
+    let df = DateFormatter()
+    df.dateFormat = "MMM d, h:mm a"
+    let dateString = df.string(from: date)
+    
+    DatabaseHandler.shared.saveImage(imgData: img, date: dateString)
   }
   
 }

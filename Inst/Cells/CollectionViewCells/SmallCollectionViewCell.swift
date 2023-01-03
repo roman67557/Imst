@@ -17,6 +17,11 @@ class SmallCollectionViewCell: UICollectionViewCell {
   private var loadImageTask: Task<Void, Never>?
   
   public func configure<T>(with photo: T) {
+    
+    addSubViews()
+    setupColor()
+    setupConstraints()
+    
     if photo is Results {
       let result = photo as? Results
       guard let string = result?.urls.regular, let url = URL(string: string) else { return }
@@ -25,18 +30,6 @@ class SmallCollectionViewCell: UICollectionViewCell {
       guard let shootedImage = photo as? ShooterdImages else { return }
       setupImageView(shootedImage: shootedImage)
     }
-    
-    self.backgroundColor = .systemGray5
-    
-    addSubViews()
-    setupConstraints()
-  }
-  
-  public func configure(with shootedImage: ShooterdImages) {
-    
-    addSubViews()
-    setupImageView(shootedImage: shootedImage)
-    setupConstraints()
   }
   
   private func addSubViews() {
@@ -45,6 +38,10 @@ class SmallCollectionViewCell: UICollectionViewCell {
       $0.translatesAutoresizingMaskIntoConstraints = false
       addSubview($0)
     }
+  }
+  
+  private func setupColor() {
+    self.backgroundColor = .systemGray5
   }
   
   private func setupImageView(url: URL) {
@@ -70,8 +67,9 @@ class SmallCollectionViewCell: UICollectionViewCell {
   }
   
   private func setupImageView(shootedImage: ShooterdImages) {
-    guard let data = shootedImage.img,
-            let image = UIImage(data: data) else { return }
+    guard let data = shootedImage.img else { return }
+    let image = UIImage(data: data)
+    
     searchPageImageView.image = image
     searchPageImageView.clipsToBounds = true
     searchPageImageView.contentMode = .scaleAspectFill

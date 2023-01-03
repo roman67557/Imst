@@ -14,9 +14,8 @@ class DatabaseHandler {
   static let shared = DatabaseHandler()
   
   public func fetchedResultsController(entityName: String, keyForSort: String) -> NSFetchedResultsController<NSFetchRequestResult> {
-    
     let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
-    let sortDescriptor = NSSortDescriptor(key: keyForSort, ascending: false)
+    let sortDescriptor = NSSortDescriptor(key: keyForSort, ascending: true)
     
     fetchRequest.sortDescriptors = [sortDescriptor]
     
@@ -28,13 +27,11 @@ class DatabaseHandler {
     return fetchedResultsController
   }
   
-  public func saveImage(img: UIImage?, date: String) {
-    
+  public func saveImage(imgData: Data?, date: String) {
     let context = persistentContainer.viewContext
     guard let photoEntity = NSEntityDescription.entity(forEntityName: "ShooterdImages", in: context) else { return }
     
     let newImage = NSManagedObject(entity: photoEntity, insertInto: context)
-    let imgData = img?.pngData()
     
     newImage.setValue(imgData, forKey: "img")
     newImage.setValue(date, forKey: "date")
@@ -42,20 +39,7 @@ class DatabaseHandler {
     self.saveContext()
   }
   
-  //  func deleteData() {
-  //
-  //    let context = persistentContainer.viewContext
-  //    let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "ShooterdImages")
-  //
-  //    let results = try? context.fetch(fetch)
-  //
-  //    for item in results as! [NSManagedObject] {
-  //      context.delete(item)
-  //    }
-  //  }
-  
   public func deleteData() {
-    
     let manageContent = persistentContainer.viewContext
     
     let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "ShooterdImages")
