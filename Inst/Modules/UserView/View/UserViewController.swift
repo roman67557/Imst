@@ -12,16 +12,20 @@ protocol Animation: AnyObject {
 
 }
 
-class UserViewController: UIViewController, Animation {
+final class UserViewController: UIViewController, Animation {
   
-  internal var presenter: UserViewPresenterProtocol?
+  //MARK: - Public Properties
+  
+  public var presenter: UserViewPresenterProtocol!
+  
+  //MARK: - Private Properties
   
   private let fetchedResultController = DatabaseHandler.shared.fetchedResultsController(entityName: "ShooterdImages", keyForSort: "date")
   private var operations = [BlockOperation]()
   private let myPhotoImageView = UIImageView()
   private var index: Int?
   
-  lazy var collectionView: UICollectionView = {
+  private lazy var collectionView: UICollectionView = {
     let layout = UICollectionViewFlowLayout()
     layout.itemSize = CGSize(width: (view.frame.width/3)-1, height: (view.frame.width/3)-1)
     layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 0)
@@ -37,6 +41,8 @@ class UserViewController: UIViewController, Animation {
     return collectionView
   }()
   
+  //MARK: - Life Cycle
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -49,7 +55,13 @@ class UserViewController: UIViewController, Animation {
     setup()
   }
   
-  func setup() {
+  deinit {
+    print("user deinit")
+  }
+  
+  //MARK: - Private Methods
+  
+  private func setup() {
     addSubViews()
     setupFetchedResultController()
     rightBarItem()
@@ -57,7 +69,7 @@ class UserViewController: UIViewController, Animation {
     setupConstraints()
   }
   
-  func addSubViews() {
+  private func addSubViews() {
     [myPhotoImageView,
      collectionView].forEach { elem in
       view.addSubview(elem)
@@ -70,12 +82,12 @@ class UserViewController: UIViewController, Animation {
     try? fetchedResultController.performFetch()
   }
   
-  func rightBarItem() {
+  private func rightBarItem() {
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(openCamera))
     navigationItem.rightBarButtonItem?.tintColor = .black
   }
   
-  func createProfileImageView() {
+  private func createProfileImageView() {
     
     guard let image = UIImage(named: "me") else { return }
     
@@ -108,6 +120,8 @@ class UserViewController: UIViewController, Animation {
   
 }
 
+//MARK: - Extensions
+
 extension UserViewController: UICollectionViewDelegate, UICollectionViewDataSource {
   
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -118,7 +132,7 @@ extension UserViewController: UICollectionViewDelegate, UICollectionViewDataSour
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SmallCollectionViewCell.identifier, for: indexPath) as? SmallCollectionViewCell,
           let shootedImage = fetchedResultController.object(at: indexPath) as? ShooterdImages else { return UICollectionViewCell() }
-    cell.configure(with: shootedImage)
+    cell.configure(with: shootedImage, and: nil)
     
     return cell
   }
@@ -143,7 +157,7 @@ extension UserViewController: UserViewProtocol {
     presenter?.moveToProfilePhoto(view: self)
   }
   
-  @objc func openCamera(_ sender: Any) {
+  @objc private func openCamera(_ sender: Any) {
     presenter?.openCamera(view: self)
   }
   
@@ -199,7 +213,7 @@ extension UserViewController: NSFetchedResultsControllerDelegate {
         guard let indexPath = indexPath else { return }
         let photo = self?.fetchedResultController.object(at: indexPath) as? ShooterdImages
         let cell = self?.collectionView.cellForItem(at: indexPath) as? SmallCollectionViewCell
-        cell?.configure(with: photo)
+        cell?.configure(with: photo, and: nil)
       }))
       
     case .move:

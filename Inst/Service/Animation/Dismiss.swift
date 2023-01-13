@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class Dismiss: NSObject, UIViewControllerAnimatedTransitioning {
+final class Dismiss: NSObject, UIViewControllerAnimatedTransitioning {
   
   private let finalFrame: CGRect
   private let duration: TimeInterval = 0.2

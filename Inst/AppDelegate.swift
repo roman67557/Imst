@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         
         let tabBarController = UITabBarController()
-        let assemblyBuilder = AssemblyModelBuilder()
+        let assemblyBuilder = ModuleBuilder()
         let router = Router(tabBarController: tabBarController, assemblyBuilder: assemblyBuilder)
         router.initialViewController()
         

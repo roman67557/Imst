@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol UpdatesViewProtocol {
+protocol UpdatesViewProtocol: AnyObject {
   
 }
 
@@ -15,10 +15,14 @@ protocol UpdatesViewPresenterProtocol {
   
 }
 
-class UpdatesViewPresenter: UpdatesViewPresenterProtocol {
+final class UpdatesViewPresenter: UpdatesViewPresenterProtocol {
   
-  let view: UpdatesViewProtocol?
-  let router: RouterProtocol?
+  //MARK: - Private Properties
+  
+  private weak var view: UpdatesViewProtocol?
+  private let router: RouterProtocol?
+  
+  //MARK: - Initializers
   
   required init(view: UpdatesViewProtocol, router: RouterProtocol) {
       self.view = view

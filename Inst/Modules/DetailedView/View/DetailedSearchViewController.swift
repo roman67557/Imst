@@ -7,11 +7,12 @@
 
 import UIKit
 
-class DetailedSearchViewController: UIViewController, UICollectionViewDataSource {
+final class DetailedSearchViewController: UIViewController {
   
-  var presenter: DetailedViewPresenterProtocol?
+  //MARK: - Public Properties
   
-  lazy var collectionView: UICollectionView = {
+  public var presenter: DetailedViewPresenterProtocol?
+  public lazy var collectionView: UICollectionView = {
     let layout = UICollectionViewFlowLayout()
     layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 0)
     layout.minimumLineSpacing = 0
@@ -29,8 +30,12 @@ class DetailedSearchViewController: UIViewController, UICollectionViewDataSource
     return collectionView
   }()
   
+  //MARK: - Private Properties
+
   private var results: Types?
   private var index: Int?
+  
+  //MARK: - Life Cycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -38,10 +43,16 @@ class DetailedSearchViewController: UIViewController, UICollectionViewDataSource
     setup()
   }
   
+  deinit {
+    print("detailed deinit")
+  }
+  
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(true)
     setupTabBarHidden(false)
   }
+  
+  //MARK: - Private Methods
   
   private func setup() {
     presenter?.setImg()
@@ -100,12 +111,18 @@ class DetailedSearchViewController: UIViewController, UICollectionViewDataSource
   
 }
 
+//MARK: - Extensions
+
 extension DetailedSearchViewController: DetailedViewProtocol {
   
   func setImg(img: Types?, index: Int) {
     self.results = img
     self.index = index
   }
+  
+}
+
+extension DetailedSearchViewController: UICollectionViewDataSource {
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     
@@ -126,10 +143,10 @@ extension DetailedSearchViewController: DetailedViewProtocol {
     switch results {
     case .results(let results):
       let photo = results[indexPath.item]
-      cell?.configure(with: photo)
+      cell?.configure(with: photo, and: self.presenter)
     case .shooterdImages(let shootedImages):
       let photo = shootedImages[indexPath.row]
-      cell?.configure(with: photo)
+      cell?.configure(with: photo, and: nil)
     default:
       break
     }

@@ -9,14 +9,21 @@ import UIKit
 
 class SmallCollectionViewCell: UICollectionViewCell {
   
+  //MARK: - Public Properties
+  
   static let identifier = "SmallCollectionViewCell"
-  
   public let searchPageImageView = UIImageView()
+  
+  //MARK: - Private Properties
+  
   private let activityIndicatorView = UIActivityIndicatorView()
-  
   private var loadImageTask: Task<Void, Never>?
+  private var presenter: SearchViewPresenterProtocol?
   
-  public func configure<T>(with photo: T) {
+  //MARK: - Public Methods
+  
+  public func configure<T>(with photo: T, and presenter: SearchViewPresenterProtocol?) {
+    self.presenter = presenter
     
     addSubViews()
     setupColor()
@@ -31,6 +38,8 @@ class SmallCollectionViewCell: UICollectionViewCell {
       setupImageView(shootedImage: shootedImage)
     }
   }
+  
+  //MARK: - Private Methods
   
   private func addSubViews() {
     
@@ -58,6 +67,7 @@ class SmallCollectionViewCell: UICollectionViewCell {
         self?.searchPageImageView.contentMode = .scaleAspectFill
         self?.searchPageImageView.clipsToBounds = true
       } catch {
+        presenter?.openAlert(error: error.localizedDescription)
         if Task.isCancelled { return }
         self?.searchPageImageView.image = nil
       }

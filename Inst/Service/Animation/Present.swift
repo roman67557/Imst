@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class Present: NSObject, UIViewControllerAnimatedTransitioning {
+final class Present: NSObject, UIViewControllerAnimatedTransitioning {
   
   private let originFrame: CGRect
   private let duration: TimeInterval = 0.2
@@ -81,16 +81,16 @@ class Present: NSObject, UIViewControllerAnimatedTransitioning {
     viewToAnimate.clipsToBounds = true
     viewToAnimate.layer.cornerRadius = rounding
     
-    DispatchQueue.main.async {
+//    DispatchQueue.main.async {
       switch self.image.imageOrientation {
       case .right:
-        guard let data = self.image.pngData() else { return }
+        guard let data = self.image.pngData() else { return UIImageView() }
         let imageToSend = UIImage(data: data)?.rotate(radians: .pi / 2)
         viewToAnimate.image = imageToSend
       default:
         break
       }
-    }
+//    }
     
     return viewToAnimate
   }

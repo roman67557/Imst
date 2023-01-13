@@ -12,7 +12,7 @@ protocol NetworkServiceProtocol {
   func request(searchTerm: String) async throws -> [Results]
 }
 
-actor NetworkService: NetworkServiceProtocol {
+final actor NetworkService: NetworkServiceProtocol {
   
   func request(searchTerm: String) async throws -> [Results] {
     let params = self.prepareParams(searchTerm: searchTerm)

@@ -9,15 +9,22 @@ import UIKit
 
 class DetailedCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
   
+  //MARK: - Public Properties
+  
   static var identifier = "DetailedCell"
+  public let imgView = UIImageView()
+  
+  //MARK: - Private Properties
   
   private let activityIndicatorView = UIActivityIndicatorView(style: .large)
   private let scrollImg = UIScrollView()
-  let imgView = UIImageView()
-  
   private var loadImageTask: Task<Void, Never>?
+  private var presenter: DetailedViewPresenterProtocol?
   
-  public func configure<T>(with photo: T) {
+  //MARK: - Public Methods
+  
+  public func configure<T>(with photo: T, and presenter: DetailedViewPresenterProtocol?) {
+    self.presenter = presenter
     
     addSubViews()
     setupScroll()
@@ -39,6 +46,8 @@ class DetailedCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
       setupImageView(shootedImage: shootedImage)
     }
   }
+  
+  //MARK: - Private Methods
   
   private func addSubViews() {
     self.addSubview(scrollImg)
@@ -79,6 +88,7 @@ class DetailedCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         try await self?.imgView.setImage(by: url)
         if Task.isCancelled { return }
       } catch {
+        presenter?.openAlert(error: error.localizedDescription)
         if Task.isCancelled { return }
         self?.imgView.image = .background
       }
@@ -95,8 +105,7 @@ class DetailedCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     imgView.contentMode = .scaleAspectFit
   }
   
-  @objc func handleDoubleTapScrollView(recognizer: UITapGestureRecognizer) {
-    
+  @objc private func handleDoubleTapScrollView(recognizer: UITapGestureRecognizer) {
     if (scrollImg.zoomScale > scrollImg.minimumZoomScale) {
       scrollImg.setZoomScale(scrollImg.minimumZoomScale, animated: true)
     } else {
@@ -104,8 +113,7 @@ class DetailedCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     }
   }
   
-  func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
-    
+  private func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
     var zoomRect = CGRect.zero
     zoomRect.size.height = imgView.frame.size.height
     zoomRect.size.width  = imgView.frame.size.width

@@ -12,7 +12,7 @@ enum PanDirection {
     case horizontal
 }
 
-class PanDirectionGestureRecognizer: UIPanGestureRecognizer {
+final class PanDirectionGestureRecognizer: UIPanGestureRecognizer {
 
     let direction: PanDirection
 

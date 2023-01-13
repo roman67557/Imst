@@ -10,11 +10,16 @@ import CoreData
 
 class UpdatesViewController: UIViewController {
   
+  //MARK: - Public Properties
+  
   public var presenter: UpdatesViewPresenterProtocol!
   
-  private let fetchedResultController = DatabaseHandler.shared.fetchedResultsController(entityName: "ShooterdImages", keyForSort: "date")
+  //MARK: - Private Properties
   
+  private let fetchedResultController = DatabaseHandler.shared.fetchedResultsController(entityName: "ShooterdImages", keyForSort: "date")
   private var myTableView = UITableView()
+  
+  //MARK: - Life Cycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -25,6 +30,12 @@ class UpdatesViewController: UIViewController {
     
     setup()
   }
+  
+  deinit {
+    print("updates deinit")
+  }
+  
+  //MARK: - Private Methods
   
   private func setup() {
     addSubViews()
@@ -59,6 +70,8 @@ class UpdatesViewController: UIViewController {
   }
   
 }
+
+//MARK: - Extensions
 
 extension UpdatesViewController: UITableViewDelegate, UITableViewDataSource {
   

@@ -1,5 +1,5 @@
 //
-//  SixthViewPresenter.swift
+//  UserViewPresenter.swift
 //  ??
 //
 //  Created by Роман on 11.04.2022.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol UserViewProtocol {
+protocol UserViewProtocol: AnyObject {
   func moveToProfilePhoto(_ sender: Any)
 }
 
@@ -19,26 +19,32 @@ protocol UserViewPresenterProtocol {
   func openDetails(img: Types?, view: UIViewController, index: Int)
 }
 
-class UserViewPresenter: UserViewPresenterProtocol {
+final class UserViewPresenter: UserViewPresenterProtocol {
   
-  var view: UserViewProtocol?
-  var router: RouterProtocol?
+  //MARK: - Private Properties
+  
+  private weak var view: UserViewProtocol?
+  private let router: RouterProtocol?
+  
+  //MARK: - Initializers
   
   required init(view: UserViewProtocol, router: RouterProtocol) {
     self.view = view
     self.router = router
   }
   
-  func moveToProfilePhoto(view: UIViewController) {
+  //MARK: - Public Methods
+  
+  public func moveToProfilePhoto(view: UIViewController) {
     
     //        view.navigationController?.pushViewController(profilePhotoVC, animated: true)
   }
   
-  func openCamera(view: UIViewController) {
+  public func openCamera(view: UIViewController) {
     router?.openCameraView(view: view)
   }
   
-  func openDetails(img: Types?, view: UIViewController, index: Int) {
+  public func openDetails(img: Types?, view: UIViewController, index: Int) {
     router?.moveToDetailedController(img: img, view: view, index: index)
   }
   

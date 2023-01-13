@@ -8,9 +8,13 @@
 import UIKit
 import AVFoundation
 
-class CameraViewController: UIViewController  {
+final class CameraViewController: UIViewController  {
   
-  var presenter: CameraViewPresenterProtocol!
+  //MARK: - Public Properties
+  
+  public var presenter: CameraViewPresenterProtocol!
+  
+  //MARK: - Private Properties
   
   private let captureButton = UIButton()
   private let changeCameraButton = UIButton()
@@ -21,6 +25,8 @@ class CameraViewController: UIViewController  {
   private var videoPreviewLayer = AVCaptureVideoPreviewLayer()
   private var capturePhotoOutput = AVCapturePhotoOutput()
   private let capturePhotoSettings = AVCapturePhotoSettings()
+  
+  //MARK: - Life Cycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -33,6 +39,12 @@ class CameraViewController: UIViewController  {
   override func viewDidLayoutSubviews() {
     videoPreviewLayer.frame = view.bounds
   }
+  
+  deinit {
+    print("camera deinit")
+  }
+  
+  //MARK: - Private Methods
   
   private func setup() {
     addSubViews()
@@ -157,7 +169,7 @@ class CameraViewController: UIViewController  {
     captureSession.commitConfiguration()
   }
   
-  func getCamera(with position: AVCaptureDevice.Position) -> AVCaptureDevice? {
+  private func getCamera(with position: AVCaptureDevice.Position) -> AVCaptureDevice? {
     let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified)
     
     for device in discoverySession.devices {
@@ -183,6 +195,8 @@ class CameraViewController: UIViewController  {
   }
   
 }
+
+//MARK: - Extensions
 
 extension CameraViewController: AVCapturePhotoCaptureDelegate {
   func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {

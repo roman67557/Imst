@@ -7,16 +7,16 @@
 
 import UIKit
 
-class MainViewControllerCell: UITableViewCell {
+final class MainViewControllerCell: UITableViewCell {
   
   //MARK: - Public Properties
   static var identifier = "MainViewControllerCell"
   
   //MARK: - Private Properties
-  private var activityIndicatorView = UIActivityIndicatorView()
-  private var cellImageView = UIImageView()
-  
+  private let activityIndicatorView = UIActivityIndicatorView()
+  private let cellImageView = UIImageView()
   private var loadImageTask: Task<Void, Never>?
+  private var presenter: MainViewPresenterProtocol?
   
   //MARK: - Init
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -26,12 +26,12 @@ class MainViewControllerCell: UITableViewCell {
   }
   
   required init?(coder: NSCoder) {
-    
     fatalError("init(coder:) has not been implemented")
   }
   
   //MARK: - Public Methods
-  public func configure(with result: Results) {
+  public func configure(with result: Results, and presenter: MainViewPresenterProtocol?) {
+    self.presenter = presenter
     guard let string = result.urls.regular,
           let url = URL(string: string) else { return }
     
@@ -42,7 +42,6 @@ class MainViewControllerCell: UITableViewCell {
   
   //MARK: - Private Methods
   private func addSubViews() {
-   
     [cellImageView, activityIndicatorView].forEach {
       $0.translatesAutoresizingMaskIntoConstraints = false
       addSubview($0)
@@ -51,27 +50,26 @@ class MainViewControllerCell: UITableViewCell {
   
   private func setupImageView(url: URL) {
     loadImageTask?.cancel()
-
+    
     loadImageTask = Task { [weak self] in
-        self?.cellImageView.image = nil
-        self?.activityIndicatorView.startAnimating()
-
-        do {
-            try await self?.cellImageView.setImage(by: url)
-            if Task.isCancelled { return }
-            self?.cellImageView.contentMode = .scaleAspectFit
-        } catch {
-            if Task.isCancelled { return }
-            self?.cellImageView.image = UIImage(named: "inst")
-            self?.cellImageView.contentMode = .scaleAspectFit
-        }
-
-        self?.activityIndicatorView.stopAnimating()
+      self?.cellImageView.image = nil
+      self?.activityIndicatorView.startAnimating()
+      
+      do {
+        try await self?.cellImageView.setImage(by: url)
+        if Task.isCancelled { return }
+        self?.cellImageView.contentMode = .scaleAspectFit
+      } catch {
+        presenter?.openAlert(error: error.localizedDescription)
+        if Task.isCancelled { return }
+        self?.cellImageView.image = UIImage(named: "inst")
+        self?.cellImageView.contentMode = .scaleAspectFit
+      }
+      self?.activityIndicatorView.stopAnimating()
     }
   }
   
   private func setupConstraints() {
-    
     cellImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
     cellImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
     cellImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true

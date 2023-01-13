@@ -11,21 +11,22 @@ import FontAwesome_swift
 
 protocol RouterMain {
   var tabBarController: UITabBarController { get set }
-  var assemblyBuilder: AssemblyBuilderProtocol { get set }
+  var assemblyBuilder: BuilderProtocol { get set }
 }
 
 protocol RouterProtocol: RouterMain {
   func initialViewController()
   func moveToDetailedController(img: Types?, view: UIViewController, index: Int)
   func openCameraView(view: UIViewController)
+  func openAlert(view: UIViewController, error: String)
 }
 
-class Router: RouterProtocol {
+final class Router: RouterProtocol {
   
   var tabBarController: UITabBarController
-  var assemblyBuilder: AssemblyBuilderProtocol
+  var assemblyBuilder: BuilderProtocol
   
-  init(tabBarController: UITabBarController, assemblyBuilder: AssemblyBuilderProtocol) {
+  init(tabBarController: UITabBarController, assemblyBuilder: BuilderProtocol) {
     self.tabBarController = tabBarController
     self.assemblyBuilder = assemblyBuilder
   }
@@ -39,7 +40,6 @@ class Router: RouterProtocol {
     
     tabBarController.setViewControllers([mainView, searchView, updatesView, userView], animated: true)
     tabBarController.tabBar.isHidden = false
-    tabBarController.tabBar.backgroundColor = .white
     
     let imagesArray = [UIImage.fontAwesomeIcon(name: .houseUser, style: .solid, textColor: .black, size: CGSize(width: 30, height: 30)),
                        UIImage.fontAwesomeIcon(name: .search, style: .solid, textColor: .black, size: CGSize(width: 30, height: 30)),
@@ -61,5 +61,10 @@ class Router: RouterProtocol {
   func openCameraView(view: UIViewController) {
     let cameraView = assemblyBuilder.createCameraViewCtonrtoller(router: self)
     view.present(cameraView, animated: true)
+  }
+  
+  func openAlert(view: UIViewController, error: String) {
+    let alert = AlertController(title: "Error", message: error, preferredStyle: .alert)
+    view.present(alert, animated: true)
   }
 }

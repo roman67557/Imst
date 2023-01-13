@@ -1,5 +1,5 @@
 //
-//  AssemblyModuleBuilder.swift
+//  ModuleBuilder.swift
 //  wqTests
 //
 //  Created by Роман on 13.01.2022.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol AssemblyBuilderProtocol {
+protocol BuilderProtocol {
   func createMainModule(router: RouterProtocol) -> UINavigationController
   func createSearchModule(router: RouterProtocol) -> UINavigationController
   func createUpdatesModule(router: RouterProtocol) -> UINavigationController
@@ -18,7 +18,7 @@ protocol AssemblyBuilderProtocol {
   func createCameraViewCtonrtoller(router: RouterProtocol) -> UIViewController
 }
 
-class AssemblyModuleBuilder: AssemblyBuilderProtocol {
+final class ModuleBuilder: BuilderProtocol {
   
   func createMainModule(router: RouterProtocol) -> UINavigationController {
     let view = MainViewController()

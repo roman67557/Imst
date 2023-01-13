@@ -9,6 +9,8 @@ import UIKit
 
 class SearchViewController: UICollectionViewController {
   
+  //MARK: - Public Properties
+  
   public var presenter: SearchViewPresenterProtocol?
   
   //MARK: - Properties
@@ -29,6 +31,12 @@ class SearchViewController: UICollectionViewController {
     
     setup()
   }
+  
+  deinit {
+    print("search deinit")
+  }
+  
+  //MARK: - Private Methods
   
   private func setup() {
     
@@ -59,8 +67,6 @@ class SearchViewController: UICollectionViewController {
     navigationController?.delegate = self
   }
   
-  //MARK: - Setup UI Elements
-  
   private func setupCollectionView() {
     let layout = UICollectionViewFlowLayout()
     layout.itemSize = CGSize(width: (view.frame.width/3)-1, height: (view.frame.width/3)-1)
@@ -85,7 +91,6 @@ class SearchViewController: UICollectionViewController {
     collectionView?.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
   }
   
-  //MARK: - Methods
   private func fetchDeafaultPhoto() {
     if searchController.searchBar.text?.isEmpty == true {
       searchTask?.cancel()
@@ -129,12 +134,11 @@ extension SearchViewController {
       return UICollectionViewCell()
     }
     let photo = results[indexPath.item]
-    itemCell.configure(with: photo)
+    itemCell.configure(with: photo, and: self.presenter)
     return itemCell
   }
   
   override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    
     let img = Types.results(self.results)
     let index = indexPath.item
     self.index = indexPath.item
@@ -146,7 +150,6 @@ extension SearchViewController {
 extension SearchViewController: UISearchBarDelegate {
   
   func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-    
     if let text = searchBar.text {
       searchTask?.cancel()
       results = []
@@ -157,7 +160,7 @@ extension SearchViewController: UISearchBarDelegate {
           self?.results = results
           self?.collectionView.reloadData()
         } catch {
-          print(error.localizedDescription)
+          self?.presenter?.openAlert(error: error.localizedDescription)
         }
       })
     }

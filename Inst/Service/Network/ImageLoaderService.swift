@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-actor ImageLoaderService {
+final actor ImageLoaderService {
   
   private var cache = NSCache<NSURL, UIImage>()
   
@@ -31,7 +31,7 @@ actor ImageLoaderService {
   private func doLoadImage(for url: URL) async throws -> UIImage {
     let urlRequest = URLRequest(url: url)
     
-//    //         Эффект плохого интернета
+    //         Эффект плохого интернета
 //    try await Task.sleep(nanoseconds: 1000 * 1000 * 1000 * .random(in: 0...2))
 //    if .random() {
 //      throw POSIXError(.E2BIG)

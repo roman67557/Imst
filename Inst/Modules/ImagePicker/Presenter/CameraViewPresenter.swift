@@ -1,5 +1,5 @@
 //
-//  HeroViewPresenter.swift
+//  CameraViewPresenter.swift
 //  ??
 //
 //  Created by Роман on 13.03.2022.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol CameraViewProtocol {
+protocol CameraViewProtocol: AnyObject {
   
 }
 
@@ -17,17 +17,23 @@ protocol CameraViewPresenterProtocol {
   func catchPhotos(img: Data?)
 }
 
-class CameraViewPresenter: CameraViewPresenterProtocol {
+final class CameraViewPresenter: CameraViewPresenterProtocol {
   
-  let view: CameraViewProtocol?
-  let router: RouterProtocol?
+  //MARK: - Private Properties
+  
+  private weak var view: CameraViewProtocol?
+  private let router: RouterProtocol?
+  
+  //MARK: - Initializers
   
   required init(view: CameraViewProtocol, router: RouterProtocol) {
     self.view = view
     self.router = router
   }
   
-  func catchPhotos(img: Data?) {
+  //MARK: - Public Methods
+  
+  public func catchPhotos(img: Data?) {
     let date = Date()
     let df = DateFormatter()
     df.dateFormat = "MMM d, h:mm a"

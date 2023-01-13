@@ -7,10 +7,17 @@
 
 import UIKit
 
-class UpdatesTableViewCell: UITableViewCell {
+final class UpdatesTableViewCell: UITableViewCell {
+  
+  //MARK: - Public Properties
   
   static let identifier = "UpdatesTableViewCell"
+  
+  //MARK: - Private Properties
+  
   private let photoImageView = UIImageView()
+  
+  //MARK: - Public Methods
   
   public func setup(data: ShooterdImages) {
     

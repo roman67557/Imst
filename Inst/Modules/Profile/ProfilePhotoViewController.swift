@@ -7,9 +7,13 @@
 
 import UIKit
 
-class ProfilePhotoViewController: UIViewController, Animation {
+final class ProfilePhotoViewController: UIViewController, Animation {
+  
+  //MARK: - Private Properties
   
   private var imgView = UIImageView()
+  
+  //MARK: - Life Cycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -17,6 +21,24 @@ class ProfilePhotoViewController: UIViewController, Animation {
     self.view.backgroundColor = .white
     setup()
   }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    tabBarController?.tabBar.isHidden = true
+    
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(true)
+    self.tabBarController?.tabBar.isHidden = false
+    self.navigationController?.isNavigationBarHidden = false
+  }
+  
+  deinit {
+    print("profilephoto deinit")
+  }
+  
+  //MARK: - Private Methods
   
   private func setup() {
     addSubViews()
@@ -37,18 +59,6 @@ class ProfilePhotoViewController: UIViewController, Animation {
   
   private func setupConstraints() {
     
-  }
-  
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-    tabBarController?.tabBar.isHidden = true
-    
-  }
-  
-  override func viewWillDisappear(_ animated: Bool) {
-    super.viewWillDisappear(true)
-    self.tabBarController?.tabBar.isHidden = false
-    self.navigationController?.isNavigationBarHidden = false
   }
   
 }
