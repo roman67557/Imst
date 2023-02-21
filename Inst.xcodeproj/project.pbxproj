@@ -48,6 +48,7 @@
 		CEE8A3A7297169B4004BE2C2 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8A3A6297169B4004BE2C2 /* Alert.swift */; };
 		CEE9CC1C27BAA9AA0076461F /* UpdatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE9CC1927BAA8EE0076461F /* UpdatesViewController.swift */; };
 		CEE9CC1D27BAA9AA0076461F /* UpdatesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE9CC1B27BAA8EE0076461F /* UpdatesTableViewCell.swift */; };
+		CEF2035629A4E22600768B55 /* CheckMergeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF2035529A4E22600768B55 /* CheckMergeRequest.swift */; };
 		E2DB418A7ABC42E62EE2ADC8 /* Pods_Inst.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB8DD3C472A011F23620C630 /* Pods_Inst.framework */; };
 /* End PBXBuildFile section */
 
@@ -122,6 +123,7 @@
 		CEE8A3A6297169B4004BE2C2 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		CEE9CC1927BAA8EE0076461F /* UpdatesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatesViewController.swift; sourceTree = "<group>"; };
 		CEE9CC1B27BAA8EE0076461F /* UpdatesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatesTableViewCell.swift; sourceTree = "<group>"; };
+		CEF2035529A4E22600768B55 /* CheckMergeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckMergeRequest.swift; sourceTree = "<group>"; };
 		D50B80487BF8E1F9A47F9514 /* Pods-Inst-InstUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Inst-InstUITests.release.xcconfig"; path = "Target Support Files/Pods-Inst-InstUITests/Pods-Inst-InstUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E78C8409715ACC1FF01DBF65 /* Pods-Inst.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Inst.debug.xcconfig"; path = "Target Support Files/Pods-Inst/Pods-Inst.debug.xcconfig"; sourceTree = "<group>"; };
 		EC3CCF50C1702E0479629DB5 /* Pods-??Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-??Tests.release.xcconfig"; path = "Target Support Files/Pods-??Tests/Pods-??Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -317,6 +319,7 @@
 				CE8E0C3827CE2CBD009984BD /* billabong.ttf */,
 				CEB49D7027AC305B00C5E189 /* LaunchScreen.storyboard */,
 				CEB49D7327AC305B00C5E189 /* Info.plist */,
+				CEF2035529A4E22600768B55 /* CheckMergeRequest.swift */,
 			);
 			path = Inst;
 			sourceTree = "<group>";
@@ -748,6 +751,7 @@
 				CE3F458029646EF800AD8A07 /* Dismiss.swift in Sources */,
 				CEE9CC1D27BAA9AA0076461F /* UpdatesTableViewCell.swift in Sources */,
 				CE30982B28044C5D0020D576 /* UserViewPresenter.swift in Sources */,
+				CEF2035629A4E22600768B55 /* CheckMergeRequest.swift in Sources */,
 				CE3B9C7727CAF39B00C588C9 /* PanDirectionGestureRecognizer.swift in Sources */,
 				CEB49E0427AC38B600C5E189 /* SearchPresenter.swift in Sources */,
 				CECF8109295C770600F21ECE /* UIButtonExtension.swift in Sources */,
